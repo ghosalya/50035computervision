@@ -442,7 +442,7 @@ def conv_backward_naive(dout, cache):
 
     for n in range(N):
         for f in range(F):
-            kernel = w[f]
+            # kernel = w[f]
             for h_ in range(H_):
                 for w_ in range(W_):
                     init_h = h_ * stride

@@ -304,10 +304,12 @@ class FullyConnectedNet(object):
             dout = sfdx if (l == self.num_layers - 1) else dx_list[0]
             if l == self.num_layers - 1:
                 ab_dx, ab_dw, ab_db = affine_backward(dout, cache)
+                ab_dw += self.reg * self.params['W'+str(l)]
             else:
                 if self.use_dropout:
                     dout = dropout_backward(dout, layer_dcache[l])
                 ab_dx, ab_dw, ab_db = affine_relu_backward(dout, cache)
+                ab_dw += self.reg * self.params['W'+str(l)]
             dx_list = [ab_dx] + dx_list
             grads['W'+str(l)] = ab_dw
             grads['b'+str(l)] = ab_db

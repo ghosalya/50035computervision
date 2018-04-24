@@ -48,17 +48,17 @@ class ThreeLayerConvNet(object):
         ############################################################################
         # conv
         self.params['W1'] = weight_scale * np.random.randn(num_filters, input_dim[0],
-                                                           filter_size, filter_size)
-        self.params['b1'] = weight_scale * np.zeros(num_filters)
+                                                           filter_size, filter_size).astype(dtype)
+        self.params['b1'] = weight_scale * np.zeros(num_filters).astype(dtype)
 
         # first affine - assume stride 1 and appropriate padding
         conv_output_dim = int(np.prod(input_dim[1:])/4 * num_filters)
-        self.params['W2'] = weight_scale * np.random.randn(conv_output_dim, hidden_dim)
-        self.params['b2'] = weight_scale * np.zeros(hidden_dim)
+        self.params['W2'] = weight_scale * np.random.randn(conv_output_dim, hidden_dim).astype(dtype)
+        self.params['b2'] = weight_scale * np.zeros(hidden_dim).astype(dtype)
 
         # last affine
-        self.params['W3'] = weight_scale * np.random.randn(hidden_dim, num_classes)
-        self.params['b3'] = weight_scale * np.zeros(num_classes)
+        self.params['W3'] = weight_scale * np.random.randn(hidden_dim, num_classes).astype(dtype)
+        self.params['b3'] = weight_scale * np.zeros(num_classes).astype(dtype)
         ############################################################################
         #                             END OF YOUR CODE                             #
         ############################################################################
@@ -111,7 +111,7 @@ class ThreeLayerConvNet(object):
         ############################################################################
         loss, sfdx = softmax_loss(scores, y)
         loss += self.reg * 0.5 * (np.linalg.norm(self.params['W2'])**2 + np.linalg.norm(self.params['W3'])**2)
-        loss += self.reg * 0.5 * np.linalg.norm(self.params['W1'])
+        loss += self.reg * 0.5 * (np.linalg.norm(self.params['W1'])**2)
 
         dx_a2, dw_a2, db_a2 = affine_backward(sfdx, cache_a2)
         dw_a2 += self.reg * self.params['W3'] # add l2reg gradient
